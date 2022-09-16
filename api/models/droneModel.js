@@ -28,6 +28,10 @@ const droneSchema = new mongoose.Schema({
     enum: ['idle','loading', 'loaded', 'delivering','delivered','returning'],
     default: 'idle',
     required: true
+  },
+  loadedMedications: {
+    type: Array,
+    required: false
   }
 
 })

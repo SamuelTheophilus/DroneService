@@ -1,4 +1,4 @@
-module.exports.constants = {
+constants = {
   api: '/api',
   available: '/available',
   battery: '/battery',
@@ -8,3 +8,6 @@ module.exports.constants = {
   register: '/register',
 
 }
+
+
+module.exports = constants;

@@ -1,17 +1,17 @@
 const controllers = require('../controllers/droneControllers');
 const konst = require('../constants/constants')
-const { Router } = require(express);
+const { Router } = require('express');
 
 const router = Router();
 
 //Register Drone
-router.post(konst.api + konst.register, controllers.registerDrone)
+router.post(konst.register, controllers.registerDrone)
 
 //Loading Drone With Medications
-router.post(konst.api + konst.loading + konst.id, controllers.loadingDrone)
+router.post(konst.api + konst.loading, controllers.loadingDrone)
 
 //Checking Drone Contents
-router.get(konst.api + konst.contents + konst.id, controllers.droneContents)
+router.get(konst.api + konst.contents, controllers.droneContents)
 
 //Checking available Drones
 router.get(konst.api + konst.available, controllers.availableDrone)
@@ -20,4 +20,4 @@ router.get(konst.api + konst.available, controllers.availableDrone)
 router.get(konst.api + konst.battery + konst.id, controllers.droneBattery)
 
 
-module.export = router;
+module.exports = router;
