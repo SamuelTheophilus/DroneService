@@ -20,7 +20,6 @@ async function checkCurrentWeight(medications, newMedicationWeight) {
     if (medication) {
       finalWeight = finalWeight + medication.weight;
     }
-
   }
   return finalWeight + newMedicationWeight;
 }
@@ -37,7 +36,7 @@ const registerDrone = async (req, res) => {
     try {
       let newDrone = await droneModel.create({ serialNumber, model, weight, battery, state });
       if (newDrone) {
-        return res.status(200).json({ message: 'Drone successfully registered', droneDetails: newDrone })
+        return res.status(200).json({ message: 'Drone successfully registered', droneDetails: newDrone.serialNumber })
       }
     } catch (error) {
       console.log(error);
@@ -52,19 +51,16 @@ const loadingDrone = async (req, res) => {
 
   try {
     let medication = await medModel.create({ name, weight, code, image });
-    if (medication) {
-      let loadingDrone = await droneModel.findOne({ serialNumber: serialNumber })
-      let finalWeight = await checkCurrentWeight(loadingDrone.loadedMedications, medication.weight)
+    let loadingDrone = await droneModel.findOne({ serialNumber: serialNumber })
+    let finalWeight = await checkCurrentWeight(loadingDrone.loadedMedications, medication.weight)
+    if (medication && (loadingDrone.battery >= 25) && (finalWeight <= loadingDrone.weight)) {
 
-      if (finalWeight <= loadingDrone.weight) {
-        await droneModel.updateOne({ serialNumber: serialNumber }, { $push: { loadedMedications: medication._id }, $set: { state: 'loaded' } })
-        return res.status(200).json({ message: 'Medication Loaded Unto Drone' });
-      } else {
-        return res.status(400).json({ message: 'Cannot Load the Medication Unto Drone, Weight Exceesds The Drone\'s carrying capacity ' })
-
-      }
-
+      await droneModel.updateOne({ serialNumber: serialNumber }, { $push: { loadedMedications: medication._id }, $set: { state: 'loaded' } })
+      return res.status(200).json({ message: 'Medication Loaded Unto Drone' });
+    } else {
+      return res.status(400).json({ message: 'Cannot Load the Medication Unto Drone, Weight Exceesds The Drone\'s carrying capacity ' })
     }
+
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Medication was not loaded unto the drone' })
