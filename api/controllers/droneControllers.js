@@ -1,7 +1,29 @@
 const droneModel = require('../models/droneModel');
 const medModel = require('../models/medModel');
 const generator = require('generate-serial-number')
-generator.generate(15);
+
+
+async function checkCurrentWeight(medications, newMedicationWeight) {
+  let ids = medications.map(x => x.toString())
+  let finalWeight = 0;
+  if (!medications) {
+    return newMedicationWeight;
+  }
+
+  // ids.forEach(async (element) => {
+  //   let medication = await medModel.findById(element)
+  //   finalWeight = finalWeight + medication.weight;
+  // });
+
+  for (let index = 0; index < ids.length; index++) {
+    let medication = await medModel.findById(ids[index])
+    if (medication) {
+      finalWeight = finalWeight + medication.weight;
+    }
+
+  }
+  return finalWeight + newMedicationWeight;
+}
 
 
 const registerDrone = async (req, res) => {
@@ -31,10 +53,17 @@ const loadingDrone = async (req, res) => {
   try {
     let medication = await medModel.create({ name, weight, code, image });
     if (medication) {
-      let loadingDrone = await droneModel.findOneAndUpdate({ serialNumber: serialNumber }, { loadedMedications: medication.name })
-      if (loadingDrone) {
-        return res.status(200).json({ message: 'Medication Loaded Unto Drone' })
+      let loadingDrone = await droneModel.findOne({ serialNumber: serialNumber })
+      let finalWeight = await checkCurrentWeight(loadingDrone.loadedMedications, medication.weight)
+
+      if (finalWeight <= loadingDrone.weight) {
+        await droneModel.updateOne({ serialNumber: serialNumber }, { $push: { loadedMedications: medication._id }, $set: { state: 'loaded' } })
+        return res.status(200).json({ message: 'Medication Loaded Unto Drone' });
+      } else {
+        return res.status(400).json({ message: 'Cannot Load the Medication Unto Drone, Weight Exceesds The Drone\'s carrying capacity ' })
+
       }
+
     }
   } catch (error) {
     console.log(error)
@@ -74,7 +103,20 @@ const availableDrone = async (req, res) => {
 }
 
 
-const droneBattery = (req, res) => {
+const droneBattery = async (req, res) => {
+
+  let { serialNumber } = req.body;
+
+  try {
+    let drone = await droneModel.findOne({ serialNumber: serialNumber })
+    if (drone) {
+      return res.status(200).json({ message: `Battery Level of the Drone is ${drone.battery}` })
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Cannot obtain the drone battery level' })
+  }
+
 
 }
 
