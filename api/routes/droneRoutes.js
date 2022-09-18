@@ -19,7 +19,7 @@ const upload = multer({ storage: filestorage })
 
 
 //Register Drone
-router.post(konst.register, controllers.registerDrone)
+router.post(konst.api + konst.register, controllers.registerDrone)
 
 //Loading Drone With Medications
 router.post(konst.api + konst.loading, upload.single('image'), controllers.loadingDrone)
@@ -31,7 +31,7 @@ router.get(konst.api + konst.contents, controllers.droneContents)
 router.get(konst.api + konst.available, controllers.availableDrone)
 
 //Checking the Battery level of a Drone
-router.get(konst.api + konst.battery + konst.id, controllers.droneBattery)
+router.get(konst.api + konst.battery, controllers.droneBattery)
 
 
 module.exports = router;

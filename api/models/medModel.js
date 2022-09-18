@@ -6,7 +6,7 @@ const medSchema = new mongoose.Schema({
     required: [true, 'Name of the medication is required'],
     validate: {
       validator: function (value) {
-        return /^[a-zA-Z0-9-_-]+$/.test(value)
+        return /^[a-zA-Z0-9- _-]+$/.test(value)
       },
       message: 'Name Should Contain Letters, Numbers, Underscores, and Dashes Only '
     }
@@ -21,7 +21,7 @@ const medSchema = new mongoose.Schema({
     required: [true, 'Code of the medication is required'],
     validate: {
       validator: function (value) {
-        return /^[a-zA-Z0-9_]+$/.test(value)
+        return /^[A-Z0-9 _]+$/.test(value)
       },
       message: 'Code of Medication Should Contain Letters, Numbers and Underscores Only'
     }
