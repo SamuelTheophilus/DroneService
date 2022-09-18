@@ -54,7 +54,7 @@
     - code: uppercase letters, underscores, dashes and spaces only
     - image: image of medication
     - serialNumber: serial number of the drone that is being loaded
-  NB: this should be in a form. It will be parsed into a json input
+  NB: this should be in a form. Form will parsed into a json input
 
   - responses: 201 , 500, 405
     - 201: success
