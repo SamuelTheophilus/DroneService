@@ -46,7 +46,7 @@ const registerDrone = async (req, res) => {
     if (model && weight) {
       let newDrone = await droneModel.create({ serialNumber, model, weight, battery, state });
       if (newDrone) {
-        return res.status(200).json({ message: 'Drone successfully registered', droneSerialNumber: newDrone.serialNumber })
+        return res.status(201).json({ message: 'Drone successfully registered', droneSerialNumber: newDrone.serialNumber })
       }
     }
   } catch (error) {
@@ -57,7 +57,6 @@ const registerDrone = async (req, res) => {
 
 
 const loadingDrone = async (req, res) => {
-  // console.log(req.file)
   let { name, weight, code, image, serialNumber } = req.body;
   image = req.file.path;
 
@@ -68,9 +67,9 @@ const loadingDrone = async (req, res) => {
     if (medication && (loadingDrone.battery >= 25) && (finalWeight <= loadingDrone.weight)) {
 
       await droneModel.updateOne({ serialNumber: serialNumber }, { $push: { loadedMedications: medication._id }, $set: { state: 'loaded' } })
-      return res.status(200).json({ message: 'Medication Loaded Unto Drone' });
+      return res.status(201).json({ message: 'Medication Loaded Unto Drone' });
     } else {
-      return res.status(400).json({ message: 'Cannot Load the Medication Unto Drone, Weight Exceesds The Drone\'s carrying capacity Or Battery Low' })
+      return res.status(405).json({ message: 'Cannot Load the Medication Unto Drone, Weight Exceesds The Drone\'s carrying capacity Or Battery Low' })
     }
 
   } catch (error) {
@@ -91,7 +90,7 @@ const droneContents = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'Could not retrieve the drone contents, check the serial Number you entered' })
+    res.status(404).json({ message: 'Could not retrieve the drone contents, check the serial Number you entered' })
   }
 
 }
@@ -106,7 +105,7 @@ const availableDrone = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'No Drones are available for loading' })
+    res.status(404).json({ message: 'No Drones are available for loading' })
   }
 
 }
@@ -123,9 +122,8 @@ const droneBattery = async (req, res) => {
     }
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'Cannot obtain the drone battery level, check the serial number provided' })
+    res.status(404).json({ message: 'Cannot obtain the drone battery level, check the serial number provided' })
   }
-
 
 }
 
