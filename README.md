@@ -21,3 +21,5 @@
 4. Run `docker ps -a` to check if the database is running. The status section should be `UP x minutes ago`
 5. Run `npm start` to start the Drone API
 6. Five drones are pre loaded in the database and their serial numbers stored in `api\db\droneSerialNumbers.txt`
+7. ![Screenshot (52)](https://user-images.githubusercontent.com/48035470/190925730-cf3ef01f-a071-46b1-9cd7-4950dc9b33e3.png)
+
