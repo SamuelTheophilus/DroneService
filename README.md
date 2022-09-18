@@ -47,13 +47,14 @@
 
 
 2. Loading Drone POST `domain/api/loading`
-    
+
   - req.body: name, weight, code , image, serialNumber
     - name: letters, numbers underscores, dashes and spaces
     - weight
     - code: uppercase letters, underscores, dashes and spaces only
     - image: image of medication
     - serialNumber: serial number of the drone that is being loaded
+  NB: this should be in a form. It will be parsed into a json input
 
   - responses: 201 , 500, 405
     - 201: success
