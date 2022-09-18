@@ -47,7 +47,9 @@ const registerDrone = async (req, res) => {
 
 
 const loadingDrone = async (req, res) => {
+  // console.log(req.file)
   let { name, weight, code, image, serialNumber } = req.body;
+  image = req.file.path;
 
   try {
     let medication = await medModel.create({ name, weight, code, image });

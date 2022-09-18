@@ -23,5 +23,3 @@ async function checkBatteryLevels() {
 //Interval for Logging the Battery Levels
 function logger() { setInterval(async function () { await checkBatteryLevels() }, 18000000); }
 module.exports = logger;
-
-
